@@ -13,7 +13,7 @@ public class ProductPage  extends BasePage{
 
     public ProductPage(WebDriver driver){ super(driver);}
 
-    public String getProductName(){ return driver.findElements(itemProduct).getText(); }
+    public String getProductName(){ return driver.findElement(itemProduct).getText(); }
 
     public String getProductPrice(){ return driver.findElement(priceProduct).getText(); }
 

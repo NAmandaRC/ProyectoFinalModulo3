@@ -4,7 +4,8 @@ import com.aventstack.extentreports.Status;
 import conf.BaseTest;
 import org.example.helpers.JsonTestDataHelper;
 import org.example.helpers.ReportManager;
-import org.example.models.Client;
+import org.example.models.Model;
+import org.example.pages.ClientForm;
 import org.example.pages.*;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
@@ -14,10 +15,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class PurchaseProductsTest extends BaseTest {
-    public static String clienTestDataPath = "resources/testdata/clientInformation/";
+    public static String clientTestDataPath = "resources/testdata/clientInformation/";
 
-    @Test(description = "validar el producto", dataProvider = "clientDataProvider")
-    public void validateProduct(ClienteForm clientForm) throws InterruptedException, IOException{
+    @Test(description = "validar compra", dataProvider = "clientDataProvider")
+    public void validateProduct(Model clientForm) throws InterruptedException, IOException{
 
         CategoryPage categoryPage = new CategoryPage(driver);
         categoryPage.selectCategory();
@@ -37,32 +38,62 @@ public class PurchaseProductsTest extends BaseTest {
         DetailCart detailCart = new DetailCart(driver);
         detailCart.clickPlaceOrder();
 
-        ReportManager.getInstance().getTest().log(Status.INFO, "Test data: " +clientForm.toString());
-        ClienteForm clientFormData = new ClienteForm(driver);
+        ReportManager.getInstance().getTest().log(Status.INFO, "Test data: " + clientForm.toString());
+        ClientForm clientFormData = new ClientForm(driver);
         clientFormData.ingressData(clientForm.getName(), clientForm.getCountry(), clientForm.getCity(), clientForm.getCard(), clientForm.getMonth(), clientForm.getYear());
         clientFormData.clickOnPurchase();
 
-    }
 
-
-    @Test(description = "validar valor del carrito")
-    public void validateValuecart() throws InterruptedException, IOException{
-
-    }
-
-    @Test(description = "validar resumen del producto")
-    public void validaResume() throws InterruptedException, IOException{
+        ThankYou clickOK = new ThankYou(driver);
+        Assert.assertTrue(clickOK.validatePurchase());
+        Thread.sleep(5000);
+        clickOK.clickOK();
 
     }
+    @Test(description = "validate product")
+    public void validateCategory() throws InterruptedException, IOException{
+        String expectedProduct = "Sony vaio i5";
 
-    @Test(description = "validar compra exitosa")
-    public void validateSuccess() throws InterruptedException, IOException{
+        CategoryPage categoryPage = new CategoryPage(driver);
+        categoryPage.selectCategory();
 
+        ProductsPage productsPage = new ProductsPage(driver);
+        productsPage.selectValidateProduct();
+
+        OverViewPage overViewPage = new OverViewPage(driver);
+        overViewPage.selectValidateProductToCart(expectedProduct);
     }
 
-    @DataProvider(name = "clientDataProvider")
+    @Test(description = "validate price")
+    public void validatePrice() throws InterruptedException{
+        String expectedPrice = "$790 *includes tax";
+
+        CategoryPage categoryPage = new CategoryPage(driver);
+        categoryPage.selectCategory();
+
+        ProductsPage productsPage = new ProductsPage(driver);
+        productsPage.selectValidateProduct();
+
+        OverViewPage overViewPage = new OverViewPage(driver);
+        overViewPage.selectValidatePrice(expectedPrice);
+    }
+
+    @Test(description = "validate description")
+    public void validateDescriptionProduct(){
+
+        CategoryPage categoryPage = new CategoryPage(driver);
+        categoryPage.selectCategory();
+
+        ProductsPage productsPage = new ProductsPage(driver);
+        productsPage.selectValidateProduct();
+
+        OverViewPage overViewPage = new OverViewPage(driver);
+        Assert.assertTrue(overViewPage.getDescription());
+    }
+
+   @DataProvider(name = "clientDataProvider")
     public Object[] clientDataProvider() throws FileNotFoundException{
-        return JsonTestDataHelper.getInstance().geTestData(clienTestDataPath + "clientData.json", Client.class);
+        return JsonTestDataHelper.getInstance().geTestData(clientTestDataPath + "formPurchase.json", Model.class);
     }
 
 

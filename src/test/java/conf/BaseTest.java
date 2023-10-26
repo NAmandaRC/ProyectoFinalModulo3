@@ -70,7 +70,7 @@ public class BaseTest {
 
             if (iTestResult.getStatus() != ITestResult.SUCCESS && iTestResult.getThrowable() != null) {
                 ReportManager.getInstance().getTest().log(Status.FAIL, iTestResult.getThrowable().getMessage());
-                ScreenShotHelper.takeScreenShotAndAdToHTMLReport(driver, Status.FAIL, "Failuer image");
+                ScreenShotHelper.takeScreenShotAndAdToHTMLReport(driver, Status.FAIL, "failuer image");
             }
 
         }catch (Exception e){
@@ -79,7 +79,7 @@ public class BaseTest {
             Thread.sleep(5000);
             if (driver != null)
                 driver.quit();
-            log.info("Closing the driver");
+            log.info("closing the driver");
 
         }
         

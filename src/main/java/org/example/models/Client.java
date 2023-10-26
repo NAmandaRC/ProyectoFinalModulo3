@@ -1,29 +1,30 @@
 package org.example.models;
 
-public class Client {
-    private String name;
-    private String country;
-    private String city;
-    private String card;
-    private String month;
-    private String year;
+import lombok.Getter;
 
-    public String getName() {
-        return name;
-    }
-    public String getCountry() {
+public class Client {
+    @Getter
+    private static String name;
+    private static String country;
+    private static String city;
+    private static String card;
+    private static String month;
+    private static String year;
+
+    public String getName(){return name;}
+    public  String getCountry() {
         return country;
     }
-    public String getCity() {
+    public  String getCity() {
         return city;
     }
-    public String getCard() {
+    public  String getCard() {
         return card;
     }
-    public String getMonth() {
+    public  String getMonth() {
         return month;
     }
-    public String getYear() {
+    public  String getYear() {
         return year;
     }
 
